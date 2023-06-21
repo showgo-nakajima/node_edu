@@ -1,0 +1,22 @@
+body {
+  width: 100%;
+}
+
+#nonedata p {
+    color: red;
+    font-weight: bold;
+}
+
+table,
+td,
+th {
+    border: 1px solid #595959;
+    border-collapse: collapse;
+}
+
+th,td {
+    padding: 3px;
+    width: 50px;
+    height: 25px;
+    text-align: center;
+}

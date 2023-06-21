@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="UTF-8">
+        <title>入力フォーム</title>
+    </head>
+    <body>
+        <h1>入力フォーム</h1>
+        <!-- ここに追加 -->
+        <form action="/" method="post" onsubmit="return validateForm()">
+            name：<input type="text" id="nameInput"><br>
+            email：<input type="text" id="emailInput">
+            <p><input type="submit" value="送信"></p>
+        </form>
+        <script>
+            function validateForm() {
+                let name  = document.getElementById("nameInput").value;
+                let email = document.getElementById("emailInput").value;
+
+                // nameのバリデーションチェック
+                // テキストボックスが空の場合もfalse
+                let nameRegex = /^[A-Za-z.]+$/;
+                if(!nameRegex.test(name) || name=="") {
+                    alert("名前は半角英字と「.」のみ入力してください。");//要件にErr文の記述は無いが一応。
+                    return false;
+                }
+                // emailのバリデーションチェック
+                // テキストボックスが空の場合もfalse
+                let emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if(!emailRegex.test(email) || email=="") {
+                    alert("正しいメールアドレスを入力してください");//要件にErr文の記述は無いが一応。
+                    return false;
+                }
+                //フォームが正常な場合は送信
+                return true;
+            }
+        </script>
+    </body>
+</html>
