@@ -87,6 +87,42 @@
                 </tr>
             </tbody>
         </table>
+        <!-- 課題03 - 各項目の内容を統計する機能 HTML-->
+        <h1>課題3 それぞれの項目の統計</h1>
+        <button id="statisticsBtn">統計情報を取得</button>
+
+        <h2>性別日の統計情報</h2>
+        <table id="genderTable">
+            <thead>
+                <tr>
+                    <th>性別</th>
+                    <th>件数</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+
+        <h2>県名の統計情報</h2>
+        <table id="workplaceTable">
+            <thead>
+                <tr>
+                    <th>県名</th>
+                    <th>件数</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+
+        <h2>世帯数の統計情報</h2>
+        <table id="householdTable">
+            <thead>
+                <tr>
+                    <th>世帯数</th>
+                    <th>件数</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
         <!-- JS -->
         <script>
             // ボタン要素を取得
@@ -116,7 +152,6 @@
                     }
                 });
             });
-            // 課題02 - 情報を格納する機能
             // -----------
             // 選択＆移動
             // -----------
@@ -125,13 +160,13 @@
                 const selectedTable = document.getElementById("selectedTable");
 
                 //選択された行から情報を取得
-                const id        = row.querySelector("td:nth-child(1)").textContent;//ID
-                const name      = row.querySelector("td:nth-child(2)").textContent;//名前
-                const kanaName  = row.querySelector("td:nth-child(3)").textContent;//ふりがな
-                const gender    = row.querySelector("td:nth-child(4)").textContent;//性別
-                const email     = row.querySelector("td:nth-child(5)").textContent;//メールアドレス
-                const phone     = row.querySelector("td:nth-child(6)").textContent;//電話番号
-                const address   = row.querySelector("td:nth-child(7)").textContent;//住所
+                const id = row.querySelector("td:nth-child(1)").textContent;//ID
+                const name = row.querySelector("td:nth-child(2)").textContent;//名前
+                const kanaName = row.querySelector("td:nth-child(3)").textContent;//ふりがな
+                const gender = row.querySelector("td:nth-child(4)").textContent;//性別
+                const email = row.querySelector("td:nth-child(5)").textContent;//メールアドレス
+                const phone = row.querySelector("td:nth-child(6)").textContent;//電話番号
+                const address = row.querySelector("td:nth-child(7)").textContent;//住所
                 const workplace = row.querySelector("td:nth-child(8)").textContent;//県名
                 const household = row.querySelector("td:nth-child(9)").textContent;//世帯数
 
@@ -152,6 +187,99 @@
 
                 //選択された行を元の一覧から削除
                 row.remove();
+            }
+
+            // ---------------
+            // 課題03
+            // ---------------
+
+            //ボタン要素を取得
+            const statisticsBtn = document.getElementById("statisticsBtn");
+
+            //ボタンクリック時のイベントリスナーを設定
+            statisticsBtn.addEventListener("click" , function() {
+                displayStatistics();
+            });
+
+            function displayStatistics() {
+                //統計情報を格納するオブジェクトを作成
+                const statistics = {
+                    gender:{},
+                    workplace:{},
+                    household:{}
+                };
+
+                //テーブルの行要素を取得
+                const rows = document.querySelectorAll("tbody tr");
+
+                //行ごとにループして統計情報を収集
+                rows.forEach(function(row) {
+                    const genderCell = row.querySelector("td:nth-child(4)");//性別取得
+                    const workplaceCell = row.querySelector("td:nth-child(8)");//県名取得
+                    const householdCell = row.querySelector("td:nth-child(9)");//世帯数取得
+
+                    //性別の統計情報を取得
+                    if(genderCell) {
+                        const gender = genderCell.textContent;
+                        if(statistics.gender[gender]) {
+                            statistics.gender[gender]++;
+                        }
+                        else{
+                            statistics.gender[gender] = 1;
+                        }
+                    }
+
+                    //県名の統計情報を取得
+                    if(workplaceCell) {
+                        const workplace = workplaceCell.textContent;
+                        if(statistics.workplace[workplace]) {
+                            statistics.workplace[workplace] ++;
+                        }
+                        else{
+                            statistics.workplace[workplace] = 1;
+                        }
+                    }
+
+                    //世帯数の統計情報を収集
+                    if(householdCell) {
+                        const household = householdCell.textContent;
+                        if(statistics.household[household]) {
+                            statistics.household[household]++;
+                        }
+                        else{
+                            statistics.household[household] = 1;
+                        }
+                    }
+                });
+
+                //統計情報を表示するテーブル要素を取得
+                const genderTable = document.getElementById("genderTable").querySelector("tbody");
+                const workplaceTable = document.getElementById("workplaceTable").querySelector("tbody");
+                const householdTable = document.getElementById("householdTable").querySelector("tbody");
+
+                //統計情報をテーブルに表示
+                displayStatisticsTable(statistics.gender, genderTable);
+                displayStatisticsTable(statistics.workplace, workplaceTable);
+                displayStatisticsTable(statistics.household, householdTable);
+            }
+
+            //統計情報をテーブルに表示する関数
+            function displayStatisticsTable(data, table) {
+                //テーブルの内容初期化
+                table.innerHTML = "";
+
+                //データのキーごとに行を作成してテーブルに追加
+                Object.keys(data).forEach(function (key) {
+                    const value = data[key];
+                    const row = document.createElement("tr");
+                    const cell1 = document.createElement("td");
+                    cell1.textContent = key;
+                    const cell2 = document.createElement("td");
+                    cell2.textContent = value;
+                    row.appendChild(cell1);
+                    row.appendChild(cell2);
+                    table.appendChild(row);
+                });
             }
         </script>
     </body>
